@@ -1,20 +1,24 @@
-
 services:
-###> doctrine/doctrine-bundle ###
-  database:
-    image: postgres:${POSTGRES_VERSION:-16}-alpine
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB:-app}
-      # You should definitely change the password in production
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
-      POSTGRES_USER: ${POSTGRES_USER:-app}
-    volumes:
-      - database_data:/var/lib/postgresql/data:rw
-      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./docker/db/data:/var/lib/postgresql/data:rw
-###< doctrine/doctrine-bundle ###
+  php:
+    build: .
+    container_name: banknote_php
+    env_file:
+      - ${BANKNOTE_ENV_FILE:-.env.server}
+    networks:
+      - todo-list-mariadb_default
+      - sundrunir-phase1_internal
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=sundrunir-phase1_internal"
+      - "traefik.http.routers.banknote.rule=Host(`${BANKNOTE_HOST:-banknote.sundrunir.com}`)"
+      - "traefik.http.routers.banknote.entrypoints=websecure"
+      - "traefik.http.routers.banknote.tls=true"
+      - "traefik.http.routers.banknote.tls.certresolver=le"
+      - "traefik.http.services.banknote.loadbalancer.server.port=80"
+    restart: unless-stopped
 
-volumes:
-###> doctrine/doctrine-bundle ###
-  database_data:
-###< doctrine/doctrine-bundle ###
+networks:
+  todo-list-mariadb_default:
+    external: true
+  sundrunir-phase1_internal:
+    external: true
