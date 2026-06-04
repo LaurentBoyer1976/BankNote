@@ -2,8 +2,11 @@ services:
   php:
     build: .
     container_name: banknote_php
-    env_file:
-      - ${BANKNOTE_ENV_FILE:-.env.server}
+    environment:
+      APP_ENV: ${APP_ENV:-prod}
+      APP_SECRET: ${APP_SECRET}
+      BANKNOTE_HOST: ${BANKNOTE_HOST:-banknote.sundrunir.com}
+      DATABASE_URL: ${DATABASE_URL}
     networks:
       - todo-list-mariadb_default
       - sundrunir-phase1_internal
