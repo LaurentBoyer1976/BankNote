@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+  <main class="main bg-dark">
+    <section class="page-panel">
+      <header class="page-heading">
+        <h1>Categories</h1>
+      </header>
+
+      <form class="management-form" method="post" action="{{ path('categories_create') }}">
+        <div class="input-wrapper">
+          <label for="name">Nom</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+        <div class="input-wrapper">
+          <label for="color">Couleur</label>
+          <input type="color" id="color" name="color" value="#00bc77" />
+        </div>
+        <button class="edit-button" type="submit">Ajouter</button>
+      </form>
+
+      <div class="table-wrapper">
+        <table class="management-table">
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Couleur</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for category in categories %}
+              <tr>
+                <td>
+                  <form id="category-update-{{ category.id }}" method="post" action="{{ path('categories_update', { id: category.id }) }}">
+                    <input type="text" name="name" value="{{ category.name }}" required />
+                  </form>
+                </td>
+                <td>
+                  <input form="category-update-{{ category.id }}" type="color" name="color" value="{{ category.color }}" />
+                </td>
+                <td class="table-actions">
+                  <button form="category-update-{{ category.id }}" class="table-button" type="submit">Modifier</button>
+                  <form method="post" action="{{ path('categories_delete', { id: category.id }) }}">
+                    <button class="table-button danger" type="submit">Supprimer</button>
+                  </form>
+                </td>
+              </tr>
+            {% else %}
+              <tr>
+                <td colspan="3">Aucune categorie pour le moment.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+{% endblock %}

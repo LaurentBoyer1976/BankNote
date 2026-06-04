@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}Bank Note{% endblock %}</title>
+    <link rel="stylesheet" href="/css/main.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      integrity="sha512-1ycn6IcaQQ40/MKB4Imkb9tVf3p3Nw1D0T2+7E2iQjV7n4Z0pniS3pSkeYMt2rt7NmBGG99nmHn7+0M4S9d2wA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  {% set requestThemeMode = app.request.attributes.get('app_theme_mode')|default('light') %}
+  {% set requestAccentColor = app.request.attributes.get('app_accent_color')|default('#00bc77') %}
+  <body class="theme-{{ requestThemeMode }}" style="--user-accent: {{ requestAccentColor|e('html_attr') }};">
+    {% include 'partials/_header.html.twig' %}
+    {% block body %}{% endblock %}
+    {% include 'partials/_footer.html.twig' %}
+  </body>
+</html>

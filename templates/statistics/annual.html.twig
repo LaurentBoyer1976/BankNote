@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+  <main class="main bg-dark">
+    <section class="page-panel wide">
+      <header class="page-heading">
+        <h1>Bilan annuel</h1>
+      </header>
+
+      <form class="management-form compact" method="get" action="{{ path('statistics_annual') }}">
+        <div class="input-wrapper">
+          <label for="year">Annee</label>
+          <select id="year" name="year">
+            {% for availableYear in availableYears %}
+              <option value="{{ availableYear }}" {% if availableYear == year %}selected{% endif %}>{{ availableYear }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <button class="edit-button" type="submit">Afficher</button>
+      </form>
+
+      <section class="stats-grid">
+        <div class="stat-item">
+          <span>Revenus</span>
+          <strong>{{ summary.income|number_format(2, ',', ' ') }} EUR</strong>
+        </div>
+        <div class="stat-item">
+          <span>Depenses</span>
+          <strong>{{ summary.expense|number_format(2, ',', ' ') }} EUR</strong>
+        </div>
+        <div class="stat-item">
+          <span>Solde</span>
+          <strong>{{ summary.balance|number_format(2, ',', ' ') }} EUR</strong>
+        </div>
+      </section>
+
+      <h2 class="section-title">Detail mensuel</h2>
+      <div class="table-wrapper">
+        <table class="management-table">
+          <thead>
+            <tr>
+              <th>Mois</th>
+              <th>Revenus</th>
+              <th>Depenses</th>
+              <th>Solde</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for month, values in summary.byMonth %}
+              <tr>
+                <td>{{ month }}</td>
+                <td>{{ values.income|number_format(2, ',', ' ') }} EUR</td>
+                <td>{{ values.expense|number_format(2, ',', ' ') }} EUR</td>
+                <td>{{ values.balance|number_format(2, ',', ' ') }} EUR</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <h2 class="section-title">Detail par categorie</h2>
+      <div class="table-wrapper">
+        <table class="management-table">
+          <thead>
+            <tr>
+              <th>Categorie</th>
+              <th>Revenus</th>
+              <th>Depenses</th>
+              <th>Solde</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for category, values in summary.byCategory %}
+              <tr>
+                <td>{{ category }}</td>
+                <td>{{ values.income|number_format(2, ',', ' ') }} EUR</td>
+                <td>{{ values.expense|number_format(2, ',', ' ') }} EUR</td>
+                <td>{{ values.balance|number_format(2, ',', ' ') }} EUR</td>
+              </tr>
+            {% else %}
+              <tr>
+                <td colspan="4">Aucune transaction pour cette annee.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+{% endblock %}

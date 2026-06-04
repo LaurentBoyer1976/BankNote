@@ -1,0 +1,135 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+  <main class="main bg-dark">
+    <section class="page-panel wide">
+      <header class="page-heading">
+        <h1>Transactions</h1>
+      </header>
+
+      <form class="management-form transaction-form" method="post" action="{{ path('transactions_create') }}">
+        <div class="input-wrapper">
+          <label for="label">Libelle</label>
+          <input type="text" id="label" name="label" required />
+        </div>
+        <div class="input-wrapper">
+          <label for="amount">Montant</label>
+          <input type="number" id="amount" name="amount" step="0.01" min="0" required />
+        </div>
+        <div class="input-wrapper">
+          <label for="type">Type</label>
+          <select id="type" name="type">
+            <option value="expense">Depense</option>
+            <option value="income">Revenu</option>
+          </select>
+        </div>
+        <div class="input-wrapper">
+          <label for="executedAt">Date</label>
+          <input type="date" id="executedAt" name="executedAt" value="{{ 'now'|date('Y-m-d') }}" />
+        </div>
+        <div class="input-wrapper">
+          <label for="accountId">Compte</label>
+          <select id="accountId" name="accountId" required>
+            {% for account in accounts %}
+              <option value="{{ account.id }}">{{ account.title }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="input-wrapper">
+          <label for="categoryId">Categorie</label>
+          <select id="categoryId" name="categoryId">
+            <option value="">Sans categorie</option>
+            {% for category in categories %}
+              <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="input-wrapper">
+          <label for="paymentMethodId">Paiement</label>
+          <select id="paymentMethodId" name="paymentMethodId">
+            <option value="">Non renseigne</option>
+            {% for paymentMethod in paymentMethods %}
+              <option value="{{ paymentMethod.id }}">{{ paymentMethod.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <button class="edit-button" type="submit">Ajouter</button>
+      </form>
+
+      <div class="table-wrapper">
+        <table class="management-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Libelle</th>
+              <th>Montant</th>
+              <th>Type</th>
+              <th>Compte</th>
+              <th>Categorie</th>
+              <th>Paiement</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for transaction in transactions %}
+              <tr>
+                <td>
+                  <form id="transaction-update-{{ transaction.id }}" method="post" action="{{ path('transactions_update', { id: transaction.id }) }}">
+                    <input type="date" name="executedAt" value="{{ transaction.executedAt|date('Y-m-d') }}" />
+                  </form>
+                </td>
+                <td>
+                  <input form="transaction-update-{{ transaction.id }}" type="text" name="label" value="{{ transaction.label }}" required />
+                </td>
+                <td>
+                  <input form="transaction-update-{{ transaction.id }}" type="number" name="amount" step="0.01" min="0" value="{{ transaction.amount }}" required />
+                </td>
+                <td>
+                  <select form="transaction-update-{{ transaction.id }}" name="type">
+                    <option value="expense" {% if transaction.type == 'expense' %}selected{% endif %}>Depense</option>
+                    <option value="income" {% if transaction.type == 'income' %}selected{% endif %}>Revenu</option>
+                  </select>
+                </td>
+                <td>
+                  <select form="transaction-update-{{ transaction.id }}" name="accountId">
+                    {% for account in accounts %}
+                      <option value="{{ account.id }}" {% if transaction.account and transaction.account.id == account.id %}selected{% endif %}>{{ account.title }}</option>
+                    {% endfor %}
+                  </select>
+                </td>
+                <td>
+                  <select form="transaction-update-{{ transaction.id }}" name="categoryId">
+                    <option value="">Sans categorie</option>
+                    {% for category in categories %}
+                      <option value="{{ category.id }}" {% if transaction.category and transaction.category.id == category.id %}selected{% endif %}>{{ category.name }}</option>
+                    {% endfor %}
+                  </select>
+                </td>
+                <td>
+                  <select form="transaction-update-{{ transaction.id }}" name="paymentMethodId">
+                    <option value="">Non renseigne</option>
+                    {% for paymentMethod in paymentMethods %}
+                      <option value="{{ paymentMethod.id }}" {% if transaction.paymentMethod and transaction.paymentMethod.id == paymentMethod.id %}selected{% endif %}>{{ paymentMethod.name }}</option>
+                    {% endfor %}
+                  </select>
+                </td>
+                <td class="table-actions">
+                  <button form="transaction-update-{{ transaction.id }}" class="table-button" type="submit">Modifier</button>
+                  <form method="post" action="{{ path('transactions_delete', { id: transaction.id }) }}">
+                    <button class="table-button danger" type="submit">Supprimer</button>
+                  </form>
+                </td>
+              </tr>
+            {% else %}
+              <tr>
+                <td colspan="8">Aucune transaction pour le moment.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+{% endblock %}

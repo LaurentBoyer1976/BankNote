@@ -1,0 +1,34 @@
+<header class="header">
+  <nav class="main-nav">
+    <a class="main-nav-logo" href="/">
+      <img
+        class="main-nav-logo-image"
+        src="/assets/img/BankNoteLogo.png"
+        alt="Bank Note"
+      />
+      <h1 class="sr-only">Bank Note</h1>
+    </a>
+    <div class="main-nav-items">
+      {% if isAuthenticated %}
+        <a class="main-nav-item" href="{{ path('dashboard') }}">Tableau de bord</a>
+        <a class="main-nav-item" href="{{ path('transactions_index') }}">Transactions</a>
+        <a class="main-nav-item" href="{{ path('categories_index') }}">Categories</a>
+        <a class="main-nav-item" href="{{ path('payment_methods_index') }}">Paiements</a>
+        <a class="main-nav-item" href="{{ path('statistics_annual') }}">Bilan</a>
+        <a class="main-nav-item" href="{{ path('user_profile') }}">
+          <i class="fa fa-user-circle"></i>
+          {{ userFirstName|default('Utilisateur') }}
+        </a>
+        <a class="main-nav-item" href="{{ path('logout') }}">
+          <i class="fa fa-sign-out-alt"></i>
+          Deconnexion
+        </a>
+      {% else %}
+        <a class="main-nav-item" href="{{ path('login') }}">
+          <i class="fa fa-user-circle"></i>
+          Connexion
+        </a>
+      {% endif %}
+    </div>
+  </nav>
+</header>

@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+  <main class="main dashboard-page bg-dark">
+    <section class="dashboard-shell">
+      <section class="dashboard-overview">
+        <div>
+          <span class="profile-kicker">Vue d'ensemble</span>
+          <h1>Bonjour {{ userFirstName }} {{ userLastName }}</h1>
+          <p>Suivez l'etat de vos comptes, vos transactions et votre bilan annuel depuis un seul ecran.</p>
+        </div>
+        <div class="dashboard-summary-strip">
+          <div>
+            <span>Comptes</span>
+            <strong>{{ dashboard.accountCount }}</strong>
+          </div>
+          <div>
+            <span>Categories</span>
+            <strong>{{ dashboard.categoryCount }}</strong>
+          </div>
+          <div>
+            <span>Paiements</span>
+            <strong>{{ dashboard.paymentMethodCount }}</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="dashboard-grid-balanced" aria-label="Indicateurs budgetaires">
+        <a class="dashboard-tile dashboard-tile-balance" href="{{ path('statistics_annual', { year: dashboard.year }) }}">
+          <span class="dashboard-tile-label">Solde total</span>
+          <strong>{{ dashboard.totalBalance|number_format(2, ',', ' ') }} EUR</strong>
+          <small>Tous comptes confondus</small>
+        </a>
+        <a class="dashboard-tile dashboard-tile-income" href="{{ path('statistics_annual', { year: dashboard.year }) }}">
+          <span class="dashboard-tile-label">Revenus {{ dashboard.year }}</span>
+          <strong>{{ dashboard.annualIncome|number_format(2, ',', ' ') }} EUR</strong>
+          <small>Total annuel</small>
+        </a>
+        <a class="dashboard-tile dashboard-tile-expense" href="{{ path('statistics_annual', { year: dashboard.year }) }}">
+          <span class="dashboard-tile-label">Depenses {{ dashboard.year }}</span>
+          <strong>{{ dashboard.annualExpense|number_format(2, ',', ' ') }} EUR</strong>
+          <small>Total annuel</small>
+        </a>
+        <a class="dashboard-tile dashboard-tile-transactions" href="{{ path('transactions_index') }}">
+          <span class="dashboard-tile-label">Transactions</span>
+          <strong>{{ dashboard.transactionCount }}</strong>
+          <small>Operations enregistrees</small>
+        </a>
+        <a class="dashboard-tile dashboard-tile-annual" href="{{ path('statistics_annual', { year: dashboard.year }) }}">
+          <span class="dashboard-tile-label">Bilan annuel</span>
+          <strong>{{ dashboard.annualBalance|number_format(2, ',', ' ') }} EUR</strong>
+          <small>Revenus moins depenses</small>
+        </a>
+        <a class="dashboard-tile dashboard-tile-payments" href="{{ path('payment_methods_index') }}">
+          <span class="dashboard-tile-label">Moyens de paiement</span>
+          <strong>{{ dashboard.paymentMethodCount }}</strong>
+          <small>Configuration disponible</small>
+        </a>
+        <a class="dashboard-tile dashboard-tile-categories" href="{{ path('categories_index') }}">
+          <span class="dashboard-tile-label">Categories</span>
+          <strong>{{ dashboard.categoryCount }}</strong>
+          <small>Axes de classement</small>
+        </a>
+      </section>
+
+      <section class="dashboard-section accounts-overview">
+        <div class="dashboard-section-header">
+          <h2>Comptes suivis</h2>
+          <a href="{{ path('transactions_index') }}">Gerer les transactions</a>
+        </div>
+        <div class="accounts-grid">
+          {% for account in accounts %}
+            <article class="account account-card">
+              <div class="account-content-wrapper">
+                <h3 class="account-title">{{ account.title }}</h3>
+                <p class="account-amount">{{ account.amount }}</p>
+                <p class="account-amount-description">{{ account.description }}</p>
+              </div>
+              <a class="transaction-button" href="{{ path('transactions_index') }}">Voir</a>
+            </article>
+          {% else %}
+            <p class="empty-state">Aucun compte n'est encore suivi.</p>
+          {% endfor %}
+        </div>
+      </section>
+    </section>
+  </main>
+{% endblock %}

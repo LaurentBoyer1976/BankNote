@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+  <main class="main">
+    <section class="hero">
+      <section class="hero-content">
+        <h2 class="sr-only">Presentation</h2>
+        <img
+          class="hero-logo"
+          src="/assets/img/BankNoteLogo.png"
+          alt="Bank Note"
+        />
+        <p class="subtitle">Suivez vos depenses.</p>
+        <p class="subtitle">Classez vos transactions.</p>
+        <p class="subtitle">Analysez votre budget.</p>
+        <p class="text">Gardez une vision claire de vos comptes au quotidien.</p>
+      </section>
+    </section>
+
+    <section class="features">
+      <h2 class="sr-only">Fonctionnalites</h2>
+      <div class="feature-item">
+        <img
+          class="feature-icon"
+          src="/assets/img/icon-chat.png"
+          alt="Icone assistance"
+        />
+        <h3 class="feature-item-title">Vos finances en un coup d'oeil</h3>
+        <p>Consultez vos comptes, vos soldes et vos mouvements depuis un tableau de bord simple.</p>
+      </div>
+      <div class="feature-item">
+        <img
+          class="feature-icon"
+          src="/assets/img/icon-money.png"
+          alt="Icone budget"
+        />
+        <h3 class="feature-item-title">Des categories personnalisables</h3>
+        <p>Organisez vos revenus et depenses par categorie pour comprendre ou part votre argent.</p>
+      </div>
+      <div class="feature-item">
+        <img
+          class="feature-icon"
+          src="/assets/img/icon-security.png"
+          alt="Icone securite"
+        />
+        <h3 class="feature-item-title">Des bilans annuels lisibles</h3>
+        <p>Suivez l'évolution de vos revenus, depenses et soldes sur toute l'année.</p>
+      </div>
+    </section>
+  </main>
+{% endblock %}

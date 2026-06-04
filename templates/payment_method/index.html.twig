@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+  <main class="main bg-dark">
+    <section class="page-panel">
+      <header class="page-heading">
+        <h1>Moyens de paiement</h1>
+      </header>
+
+      <form class="management-form" method="post" action="{{ path('payment_methods_create') }}">
+        <div class="input-wrapper">
+          <label for="name">Nom</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+        <div class="input-wrapper">
+          <label for="type">Type</label>
+          <select id="type" name="type">
+            <option value="card">Carte</option>
+            <option value="transfer">Virement</option>
+            <option value="cash">Especes</option>
+            <option value="check">Cheque</option>
+          </select>
+        </div>
+        <button class="edit-button" type="submit">Ajouter</button>
+      </form>
+
+      <div class="table-wrapper">
+        <table class="management-table">
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Type</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for paymentMethod in paymentMethods %}
+              <tr>
+                <td>
+                  <form id="payment-update-{{ paymentMethod.id }}" method="post" action="{{ path('payment_methods_update', { id: paymentMethod.id }) }}">
+                    <input type="text" name="name" value="{{ paymentMethod.name }}" required />
+                  </form>
+                </td>
+                <td>
+                  <select form="payment-update-{{ paymentMethod.id }}" name="type">
+                    <option value="card" {% if paymentMethod.type == 'card' %}selected{% endif %}>Carte</option>
+                    <option value="transfer" {% if paymentMethod.type == 'transfer' %}selected{% endif %}>Virement</option>
+                    <option value="cash" {% if paymentMethod.type == 'cash' %}selected{% endif %}>Especes</option>
+                    <option value="check" {% if paymentMethod.type == 'check' %}selected{% endif %}>Cheque</option>
+                  </select>
+                </td>
+                <td class="table-actions">
+                  <button form="payment-update-{{ paymentMethod.id }}" class="table-button" type="submit">Modifier</button>
+                  <form method="post" action="{{ path('payment_methods_delete', { id: paymentMethod.id }) }}">
+                    <button class="table-button danger" type="submit">Supprimer</button>
+                  </form>
+                </td>
+              </tr>
+            {% else %}
+              <tr>
+                <td colspan="3">Aucun moyen de paiement pour le moment.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+{% endblock %}

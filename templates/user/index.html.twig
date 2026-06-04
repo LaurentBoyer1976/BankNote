@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+  <main class="main profile-page bg-dark">
+    <section class="profile-settings-panel">
+      <div class="page-heading">
+        <span class="profile-kicker">Compte utilisateur</span>
+        <h1>Profil et affichage</h1>
+        <p>Modifiez vos informations personnelles, votre mot de passe et l'apparence de Bank Note.</p>
+      </div>
+
+      {% if error %}
+        <p class="sign-in-error">{{ error }}</p>
+      {% endif %}
+      {% if success %}
+        <p class="sign-in-success">{{ success }}</p>
+      {% endif %}
+
+      <form class="profile-settings-form" method="post" action="{{ path('user_profile_update') }}">
+        <section class="profile-form-section">
+          <h2>Identite</h2>
+          <div class="profile-form-grid">
+            <div class="input-wrapper">
+              <label for="firstName">Prenom</label>
+              <input type="text" id="firstName" name="firstName" value="{{ profile.firstName }}" required />
+            </div>
+            <div class="input-wrapper">
+              <label for="lastName">Nom</label>
+              <input type="text" id="lastName" name="lastName" value="{{ profile.lastName }}" required />
+            </div>
+            <div class="input-wrapper">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" value="{{ profile.email }}" required />
+            </div>
+            <div class="input-wrapper">
+              <label for="phone">Telephone</label>
+              <input type="tel" id="phone" name="phone" value="{{ profile.phone|default('') }}" />
+            </div>
+            <div class="input-wrapper profile-form-wide">
+              <label for="address">Adresse</label>
+              <input type="text" id="address" name="address" value="{{ profile.address|default('') }}" />
+            </div>
+          </div>
+        </section>
+
+        <section class="profile-form-section">
+          <h2>Securite</h2>
+          <div class="profile-form-grid">
+            <div class="input-wrapper profile-form-wide">
+              <label for="password">Nouveau mot de passe</label>
+              <input type="password" id="password" name="password" autocomplete="new-password" placeholder="Laisser vide pour ne pas modifier" />
+            </div>
+          </div>
+        </section>
+
+        <section class="profile-form-section">
+          <h2>Affichage</h2>
+          <div class="theme-mode-control" role="radiogroup" aria-label="Mode d'affichage">
+            <label>
+              <input type="radio" name="themeMode" value="light" {% if profile.themeMode != 'dark' %}checked{% endif %} />
+              <span>Clair</span>
+            </label>
+            <label>
+              <input type="radio" name="themeMode" value="dark" {% if profile.themeMode == 'dark' %}checked{% endif %} />
+              <span>Sombre</span>
+            </label>
+          </div>
+
+          <div class="color-swatches" role="radiogroup" aria-label="Couleur d'accent">
+            {% for color in accentColors %}
+              <label style="--swatch-color: {{ color.value }}">
+                <input type="radio" name="accentColor" value="{{ color.value }}" {% if profile.accentColor == color.value %}checked{% endif %} />
+                <span title="{{ color.label }}"></span>
+                <em>{{ color.label }}</em>
+              </label>
+            {% endfor %}
+          </div>
+        </section>
+
+        <div class="profile-form-actions">
+          <button type="submit" class="sign-in-button save-button">Enregistrer</button>
+          <a href="{{ path('dashboard') }}" class="sign-in-button cancel-button">Retour au tableau de bord</a>
+        </div>
+      </form>
+    </section>
+  </main>
+{% endblock %}
